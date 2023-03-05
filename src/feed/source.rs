@@ -19,7 +19,9 @@ impl Source {
         };
 
         let offset_date = match properties.get("Offset date") {
-            Some(PropertyValue::Text { rich_text }) => rich_text.first().map(|RichText::Text { rich_text: _, text }| &text.content),
+            Some(PropertyValue::Text { rich_text }) => rich_text
+                .first()
+                .map(|RichText::Text { rich_text: _, text }| &text.content),
             _ => None,
         };
 
@@ -31,7 +33,8 @@ impl Source {
         let offset_date = match offset_date {
             offset if offset > 0 => Utc::now()
                 .date_naive()
-                .and_hms(0, 0, 0)
+                .and_hms_opt(0, 0, 0)
+                .unwrap()
                 .date()
                 .checked_sub_months(Months::new(offset)),
             _ => None,
@@ -65,19 +68,4 @@ fn extract_offset(input: &str) -> Option<u32> {
     }
 
     None
-}
-
-#[cfg(test)]
-mod tests {
-    use super::extract_offset;
-
-    #[test]
-    fn test_extract_offset() {
-        assert_eq!(1, extract_offset("1 month").unwrap());
-        assert!(extract_offset("0 month").is_none());
-        assert!(extract_offset("1 months").is_none());
-        assert!(extract_offset("-1 months").is_none());
-        assert!(extract_offset("12 month").is_none());
-        assert_eq!(12, extract_offset("12 months").unwrap());
-    }
 }

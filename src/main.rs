@@ -23,11 +23,15 @@ struct Arguments {
 async fn main() -> Result<(), Box<dyn Error>> {
     let args = Arguments::parse();
 
-    let config = Config::new(args.notion_api_token, args.notion_source_database_id, args.notion_feed_database_id)
-        .unwrap_or_else(|err| {
-            eprintln!("Failed to create application config: {err}");
-            process::exit(1)
-        });
+    let config = Config::new(
+        args.notion_api_token,
+        args.notion_source_database_id,
+        args.notion_feed_database_id,
+    )
+    .unwrap_or_else(|err| {
+        eprintln!("Failed to create application config: {err}");
+        process::exit(1)
+    });
 
     let notion_client = Client::new(&config).unwrap_or_else(|err| {
         eprintln!("{}", format!("Failed to create the notion client: {err}"));
