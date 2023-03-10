@@ -9,7 +9,7 @@ jobs:
   build:
     name: Build Rust
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'Lpmvb'
+    if: github.repository_owner == 'jiangxiaoxv'
     steps:
       - name: Set up Repository
         uses: actions/checkout@v3
